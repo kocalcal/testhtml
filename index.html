@@ -34,17 +34,16 @@
     </style>
 </head>
 <body>
-    <h1>BLS Selfie 3</h1>
+    <h1>BLS Selfie 4</h1>
     <button id="startSelfie">Démarrer le Selfie</button>
     <script>
-        
-
-        button.addEventListener('click', async () => {
-                 OzLiveness.open({
+        // Function to initialize and open OzLiveness
+        function openOzLiveness() {
+            OzLiveness.open({
                 lang: 'en',
                 meta: {
                     'user_id': 'c5bca275-cdfe-46a9-bc3c-99695bc30577',
-                    'transaction_id': "d213"
+                    'transaction_id': 'd213'
                 },
                 overlay_options: false,
                 action: ['video_selfie_blank'],
@@ -52,63 +51,18 @@
                     console.log('on_complete', result);
                     console.log('on_complete', result.analyses.quality.resolution);
                     console.log('on_complete', result.analyses.quality.state);
-                    if (result.analyses.quality.resolution == "declined") {
-                        swal({
-                            position: 'top-end',
-                            title: "erreur - Réessayez le selfie",
-                            showConfirmButton: false,
-                            timer: 200000000
-                        });
-                    } else {
-                        swal({
-                            position: 'top-end',
-                            title: result.event_session_id,
-                            showConfirmButton: false,
-                            timer: 200000000
-                        });
-                    }
                 }
             });
-        });
+        }
 
-        video.addEventListener('click', () => {
-                 OzLiveness.open({
-                lang: 'en',
-                meta: {
-                    'user_id': 'c5bca275-cdfe-46a9-bc3c-99695bc30577',
-                    'transaction_id': "d213"
-                },
-                overlay_options: false,
-                action: ['video_selfie_blank'],
-                on_complete: function(result) {
-                    console.log('on_complete', result);
-                    console.log('on_complete', result.analyses.quality.resolution);
-                    console.log('on_complete', result.analyses.quality.state);
-                    if (result.analyses.quality.resolution == "declined") {
-                        swal({
-                            position: 'top-end',
-                            title: "erreur - Réessayez le selfie",
-                            showConfirmButton: false,
-                            timer: 200000000
-                        });
-                    } else {
-                        swal({
-                            position: 'top-end',
-                            title: result.event_session_id,
-                            showConfirmButton: false,
-                            timer: 200000000
-                        });
-                    }
-                }
-            });
-        });
-
-        // Charger le script du SDK et initialiser OzLiveness
+        // Load the OzLiveness SDK script
         const script = document.createElement('script');
         script.src = 'https://web-sdk.cdn.prod.ozforensics.com/blsinternational/plugin_liveness.php';
-      
-        
-        document.body.append(script);
+        script.onload = function() {
+            // Attach event listener to the button once the script is loaded
+            document.getElementById('startSelfie').addEventListener('click', openOzLiveness);
+        };
+        document.body.appendChild(script);
     </script>
 </body>
 </html>
