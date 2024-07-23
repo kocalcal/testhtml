@@ -34,39 +34,13 @@
     </style>
 </head>
 <body>
-    <h1>BLS Selfie 2</h1>
+    <h1>BLS Selfie 3</h1>
     <button id="startSelfie">Démarrer le Selfie</button>
-    <video id="video" autoplay></video>
-    <canvas id="canvas"></canvas>
     <script>
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const button = document.getElementById('startSelfie');
+        
 
         button.addEventListener('click', async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                video.srcObject = stream;
-                video.style.display = 'block';
-                canvas.style.display = 'none';
-            } catch (error) {
-                console.error('Erreur d\'accès à la webcam:', error);
-            }
-        });
-
-        video.addEventListener('click', () => {
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-            video.style.display = 'none';
-            canvas.style.display = 'block';
-        });
-
-        // Charger le script du SDK et initialiser OzLiveness
-        const script = document.createElement('script');
-        script.src = 'https://web-sdk.cdn.prod.ozforensics.com/blsinternational/plugin_liveness.php';
-        script.onload = () => {
-            OzLiveness.open({
+                 OzLiveness.open({
                 lang: 'en',
                 meta: {
                     'user_id': 'c5bca275-cdfe-46a9-bc3c-99695bc30577',
@@ -95,7 +69,45 @@
                     }
                 }
             });
-        };
+        });
+
+        video.addEventListener('click', () => {
+                 OzLiveness.open({
+                lang: 'en',
+                meta: {
+                    'user_id': 'c5bca275-cdfe-46a9-bc3c-99695bc30577',
+                    'transaction_id': "d213"
+                },
+                overlay_options: false,
+                action: ['video_selfie_blank'],
+                on_complete: function(result) {
+                    console.log('on_complete', result);
+                    console.log('on_complete', result.analyses.quality.resolution);
+                    console.log('on_complete', result.analyses.quality.state);
+                    if (result.analyses.quality.resolution == "declined") {
+                        swal({
+                            position: 'top-end',
+                            title: "erreur - Réessayez le selfie",
+                            showConfirmButton: false,
+                            timer: 200000000
+                        });
+                    } else {
+                        swal({
+                            position: 'top-end',
+                            title: result.event_session_id,
+                            showConfirmButton: false,
+                            timer: 200000000
+                        });
+                    }
+                }
+            });
+        });
+
+        // Charger le script du SDK et initialiser OzLiveness
+        const script = document.createElement('script');
+        script.src = 'https://web-sdk.cdn.prod.ozforensics.com/blsinternational/plugin_liveness.php';
+      
+        
         document.body.append(script);
     </script>
 </body>
