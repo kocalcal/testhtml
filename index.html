@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLS Selfie 2</title>
+    <title>BLS Selfie</title>
     <style>
         body {
             display: flex;
@@ -34,7 +34,7 @@
     </style>
 </head>
 <body>
-    <h1>BLS Selfie</h1>
+    <h1>BLS Selfie 2</h1>
     <button id="startSelfie">Démarrer le Selfie</button>
     <video id="video" autoplay></video>
     <canvas id="canvas"></canvas>
@@ -62,8 +62,40 @@
             canvas.style.display = 'block';
         });
 
+        // Charger le script du SDK et initialiser OzLiveness
         const script = document.createElement('script');
         script.src = 'https://web-sdk.cdn.prod.ozforensics.com/blsinternational/plugin_liveness.php';
+        script.onload = () => {
+            OzLiveness.open({
+                lang: 'en',
+                meta: {
+                    'user_id': 'c5bca275-cdfe-46a9-bc3c-99695bc30577',
+                    'transaction_id': "d213"
+                },
+                overlay_options: false,
+                action: ['video_selfie_blank'],
+                on_complete: function(result) {
+                    console.log('on_complete', result);
+                    console.log('on_complete', result.analyses.quality.resolution);
+                    console.log('on_complete', result.analyses.quality.state);
+                    if (result.analyses.quality.resolution == "declined") {
+                        swal({
+                            position: 'top-end',
+                            title: "erreur - Réessayez le selfie",
+                            showConfirmButton: false,
+                            timer: 200000000
+                        });
+                    } else {
+                        swal({
+                            position: 'top-end',
+                            title: result.event_session_id,
+                            showConfirmButton: false,
+                            timer: 200000000
+                        });
+                    }
+                }
+            });
+        };
         document.body.append(script);
     </script>
 </body>
