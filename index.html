@@ -35,8 +35,9 @@
 </head>
 <body>
     <h1>BLS Selfie</h1>
-    <script src="https://web-sdk.cdn.prod.ozforensics.com/blsinternational/plugin_liveness.php"></script>
     <button id="startSelfie">Démarrer le Selfie</button>
+    <video id="video" autoplay></video>
+    <canvas id="canvas"></canvas>
     <script>
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
@@ -60,6 +61,10 @@
             video.style.display = 'none';
             canvas.style.display = 'block';
         });
+
+        const script = document.createElement('script');
+        script.src = 'https://web-sdk.cdn.prod.ozforensics.com/blsinternational/plugin_liveness.php';
+        document.body.append(script);
     </script>
 </body>
 </html>
